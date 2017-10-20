@@ -178,18 +178,25 @@ var Fares = function () {
      * 
      * Max possible fare is 3.20
      */
+
     function Fares() {
         var credit = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30;
+        var originZone = arguments[1];
+        var destinationZone = arguments[2];
+        var travelMethod = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'tube';
 
         _classCallCheck(this, Fares);
 
         this.credit = credit;
         this.maxFare = 3.20;
         this.currentFare = 0;
+        this.zonesTravelled = [];
+        this.originZone = originZone;
+        this.destinationZone = destinationZone;
     }
 
     _createClass(Fares, [{
-        key: "currentFare",
+        key: 'currentFare',
         value: function (_currentFare) {
             function currentFare() {
                 return _currentFare.apply(this, arguments);
@@ -204,9 +211,49 @@ var Fares = function () {
             return currentFare;
         })
     }, {
-        key: "barrierEntry",
+        key: 'barrierEntry',
         value: function barrierEntry() {
             this.currentFare = this.credit - this.maxFare;
+            this.zonesTravelled.push(this.originZone);
+        }
+    }, {
+        key: 'barrierLeave',
+        value: function barrierLeave() {
+            zonesTravelled.push(destinationZone);
+        }
+    }, {
+        key: 'calculateFare',
+        value: function calculateFare() {
+            if (travelMethod === 'bus') {
+                this.currentFare = this.credit - 1.80;
+                return;
+            }
+
+            switch (this.zonesTravelled) {
+                case '':
+
+            }
+            // if zone 1: 
+            // remove 2.50 from currentFare
+
+            // if zone 1 doesn't exist
+            // and array length is 1
+            // remove 2.00
+
+            // if zone 1 exists 
+            // and array length is 2
+            // remove 3.00
+
+            // if zone 1 doesn't exist 
+            // and array length is 2
+            // remove 2.25
+
+            // if zone 1 exists and 
+            // and array length is greater than 2
+            // remove 3.20
+
+            // if travelMethod = 'bus'
+            // remove 1.80 
         }
     }]);
 

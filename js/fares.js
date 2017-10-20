@@ -13,13 +13,18 @@ export default class Fares {
          * 
          * Max possible fare is 3.20
          */    
-    constructor(credit=30) {
+
+
+    constructor(credit=30, originZone, destinationZone, travelMethod='tube') {
         this.credit = credit; 
         this.maxFare = 3.20; 
         this.currentFare = 0; 
+        this.zonesTravelled = [];  
+        this.originZone = originZone; 
+        this.destinationZone = destinationZone;    
     }
 
-
+    
 
     currentFare() {
         return currentFare; 
@@ -27,11 +32,45 @@ export default class Fares {
 
     barrierEntry() {
         this.currentFare = (this.credit - this.maxFare); 
+        this.zonesTravelled.push(this.originZone); 
     }
 
+    barrierLeave() {
+        zonesTravelled.push(destinationZone); 
+    }
 
+    calculateFare() {
+        if (travelMethod === 'bus') {
+            this.currentFare = (this.credit - 1.80); 
+            return; 
+        }
 
-    
+        switch (this.zonesTravelled) {
+            case '': 
 
-    
+        }
+        // if zone 1: 
+        // remove 2.50 from currentFare
+
+        // if zone 1 doesn't exist
+        // and array length is 1
+        // remove 2.00
+
+        // if zone 1 exists 
+        // and array length is 2
+        // remove 3.00
+
+        // if zone 1 doesn't exist 
+        // and array length is 2
+        // remove 2.25
+
+        // if zone 1 exists and 
+        // and array length is greater than 2
+        // remove 3.20
+
+        // if travelMethod = 'bus'
+        // remove 1.80 
+
+    }
+
 }
