@@ -74,9 +74,25 @@ var _stations = __webpack_require__(1);
 
 var _stations2 = _interopRequireDefault(_stations);
 
+var _fares = __webpack_require__(2);
+
+var _fares2 = _interopRequireDefault(_fares);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * Tube Holborn to Earl's Court
+ * 328 bus from Earl's Court to Chelsea
+ * Tube Earl's court to Hammersmith
+ */
+
 var zone = new _stations2.default('Holborn');
+
+var fares = new _fares2.default();
+
+fares.barrierEntry();
+
+console.log(fares.currentFare);
 
 console.log(zone.stationZoneByName);
 
@@ -96,10 +112,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Stations = function () {
-    function Stations(name) {
+    function Stations(stationName) {
         _classCallCheck(this, Stations);
 
-        this.name = name;
+        this.stationName = stationName;
+
         this.stations = [{
             "name": "Holborn",
             "zone": "1"
@@ -120,9 +137,8 @@ var Stations = function () {
         get: function get() {
             var _this = this;
 
-            console.log(this.stations);
             return this.stations.find(function (e) {
-                return e.name === _this.namename;
+                return e.name === _this.stationName;
             });
         }
     }]);
@@ -131,6 +147,73 @@ var Stations = function () {
 }();
 
 exports.default = Stations;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Fares = function () {
+    /**
+     * fare is calculated at max fare on entry
+     * on exit, max fare is removed, actual fare applied
+     * The fare defaults to the minimum price
+     * 
+     * Anywhere in Zone 1               2.50
+     * Any one zone outside zone 1      2.00
+     * Any two zones including zone 1   3.00
+     * Any two zones excluding zone 1   2.25
+     * Any three zones                  3.20
+     * Any bus journey                  1.80
+     * 
+     * Max possible fare is 3.20
+     */
+    function Fares() {
+        var credit = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30;
+
+        _classCallCheck(this, Fares);
+
+        this.credit = credit;
+        this.maxFare = 3.20;
+        this.currentFare = 0;
+    }
+
+    _createClass(Fares, [{
+        key: "currentFare",
+        value: function (_currentFare) {
+            function currentFare() {
+                return _currentFare.apply(this, arguments);
+            }
+
+            currentFare.toString = function () {
+                return _currentFare.toString();
+            };
+
+            return currentFare;
+        }(function () {
+            return currentFare;
+        })
+    }, {
+        key: "barrierEntry",
+        value: function barrierEntry() {
+            this.currentFare = this.credit - this.maxFare;
+        }
+    }]);
+
+    return Fares;
+}();
+
+exports.default = Fares;
 
 /***/ })
 /******/ ]);
