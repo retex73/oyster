@@ -15,13 +15,14 @@ export default class Fares {
          */    
 
 
-    constructor(credit=30, originZone, destinationZone, travelMethod='tube') {
+    constructor(credit=30) {
         this.credit = credit; 
         this.maxFare = 3.20; 
         this.currentFare = 0; 
         this.zonesTravelled = [];  
-        this.originZone = originZone; 
-        this.destinationZone = destinationZone;    
+
+        const enterBarrier = 'BARRIER_ENTRY'; 
+        const leaveBarrier = 'BARRIER_LEAVE'; 
     }
 
     
@@ -30,13 +31,27 @@ export default class Fares {
         return currentFare; 
     }
 
-    barrierEntry() {
-        this.currentFare = (this.credit - this.maxFare); 
-        this.zonesTravelled.push(this.originZone); 
+    recordJourney(part, station="") {
+        if(part === this.enterBarrier) {
+            console.log(this.enterBarrier); 
+            this.zonesTravelled.push(station.stationZoneByName); 
+        } else {
+            console.log(this.leaveBarrier); 
+        }
     }
 
+
+    barrierEntry(station) {
+        // Deduct the max fare
+        this.currentFare = (this.credit - this.maxFare); 
+        // Record the outward journey
+        this.recordJourney(this.enterBarrier, station); 
+    }
+
+
     barrierLeave() {
-        zonesTravelled.push(destinationZone); 
+        this.recordJourney(this.leaveBarrier); 
+        console.log(this.zonesTravelled); 
     }
 
     calculateFare() {

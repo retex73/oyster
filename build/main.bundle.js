@@ -86,15 +86,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Tube Earl's court to Hammersmith
  */
 
-var zone = new _stations2.default('Holborn');
-
 var fares = new _fares2.default();
 
-fares.barrierEntry();
+fares.barrierEntry(new _stations2.default('Holborn'));
+fares.barrierEntry(new _stations2.default("Earl's Court"));
 
-console.log(fares.currentFare);
-
-console.log(zone.stationZoneByName);
+fares.barrierLeave();
 
 /***/ }),
 /* 1 */
@@ -181,9 +178,6 @@ var Fares = function () {
 
     function Fares() {
         var credit = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30;
-        var originZone = arguments[1];
-        var destinationZone = arguments[2];
-        var travelMethod = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'tube';
 
         _classCallCheck(this, Fares);
 
@@ -191,8 +185,9 @@ var Fares = function () {
         this.maxFare = 3.20;
         this.currentFare = 0;
         this.zonesTravelled = [];
-        this.originZone = originZone;
-        this.destinationZone = destinationZone;
+
+        var enterBarrier = 'BARRIER_ENTRY';
+        var leaveBarrier = 'BARRIER_LEAVE';
     }
 
     _createClass(Fares, [{
@@ -211,15 +206,30 @@ var Fares = function () {
             return currentFare;
         })
     }, {
+        key: 'recordJourney',
+        value: function recordJourney(part) {
+            var station = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+
+            if (part === this.enterBarrier) {
+                console.log(this.enterBarrier);
+                this.zonesTravelled.push(station.stationZoneByName);
+            } else {
+                console.log(this.leaveBarrier);
+            }
+        }
+    }, {
         key: 'barrierEntry',
-        value: function barrierEntry() {
+        value: function barrierEntry(station) {
+            // Deduct the max fare
             this.currentFare = this.credit - this.maxFare;
-            this.zonesTravelled.push(this.originZone);
+            // Record the outward journey
+            this.recordJourney(this.enterBarrier, station);
         }
     }, {
         key: 'barrierLeave',
         value: function barrierLeave() {
-            zonesTravelled.push(destinationZone);
+            this.recordJourney(this.leaveBarrier);
+            console.log(this.zonesTravelled);
         }
     }, {
         key: 'calculateFare',

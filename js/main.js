@@ -6,14 +6,17 @@ import Fares from './fares';
  * Tube Earl's court to Hammersmith
  */
 
-let zone = new Stations('Holborn'); 
+
 
 let fares = new Fares(); 
 
-fares.barrierEntry(); 
-
-console.log(fares.currentFare); 
 
 
-console.log(zone.stationZoneByName); 
+fares.barrierEntry(new Stations('Holborn')); 
+fares.barrierEntry(new Stations("Earl's Court")); 
+
+
+
+fares.barrierLeave(); 
+
 
