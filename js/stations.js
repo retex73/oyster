@@ -17,7 +17,7 @@ export default class Stations {
                 "zone": "3"
             },
             {
-                "name": "Hammersmit", 
+                "name": "Hammersmith", 
                 "zone": "2"
             },                                    
         ]; 

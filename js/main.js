@@ -32,6 +32,26 @@ fares.barrierEntry(new Stations('Holborn'), TUBE);
 
 fares.barrierLeave(new Stations("Earl's Court"), TUBE); 
 
+let passengerJourney = () => {
+    fares.barrierEntry(new Stations('Holborn'), TUBE); 
+    fares.barrierLeave(new Stations("Earl's Court"), TUBE); 
+
+    fares.barrierEntry(new Stations("Earl's Court"), BUS); 
+    fares.barrierLeave(new Stations('Chelsea'), BUS); 
+
+    fares.barrierEntry(new Stations("Earl's Court"), TUBE); 
+    fares.barrierLeave(new Stations('Hammersmith'), TUBE); 
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
