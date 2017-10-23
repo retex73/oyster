@@ -1,7 +1,7 @@
 export default class Stations {
-    constructor(stationName) {
+    constructor(station) {
 
-        this.stationName = stationName; 
+        this._station = station; 
         
         this.stations = [
             {
@@ -23,8 +23,11 @@ export default class Stations {
         ]; 
     }
 
-    get stationZoneByName() {
-        return this.stations.find(e=> e.name === this.stationName);
+    set station(name) {
+        return this._station; 
+    }
+    get station() {
+        return this.stations.find(e=> e.name === this._station);
     }
 
     

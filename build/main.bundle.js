@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,13 +70,64 @@
 "use strict";
 
 
-var _stations = __webpack_require__(1);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var TransportTypes = function () {
+    function TransportTypes(transportType) {
+        _classCallCheck(this, TransportTypes);
+
+        this._transportType = transportType;
+
+        this.transportTypes = [{
+            "type": "bus"
+        }, {
+            "type": "tube"
+        }];
+    }
+
+    _createClass(TransportTypes, [{
+        key: "transportType",
+        set: function set(type) {
+            this._transportType = type;
+        },
+        get: function get() {
+            var _this = this;
+
+            return this.transportTypes.find(function (e) {
+                return e.type === _this._transportType;
+            });
+        }
+    }]);
+
+    return TransportTypes;
+}();
+
+exports.default = TransportTypes;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _stations = __webpack_require__(2);
 
 var _stations2 = _interopRequireDefault(_stations);
 
-var _fares = __webpack_require__(2);
+var _fares = __webpack_require__(3);
 
 var _fares2 = _interopRequireDefault(_fares);
+
+var _transport_types = __webpack_require__(0);
+
+var _transport_types2 = _interopRequireDefault(_transport_types);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -88,13 +139,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var fares = new _fares2.default();
 
-fares.barrierEntry(new _stations2.default('Holborn'));
-fares.barrierEntry(new _stations2.default("Earl's Court"));
+var BUS = new _transport_types2.default('bus').transportType;
+var TUBE = new _transport_types2.default('tube').transportType;
 
-fares.barrierLeave();
+console.log(BUS);
+
+fares.barrierEntry(new _stations2.default('Holborn'), TUBE);
+
+// fares.barrierEntry(new Stations("Earl's Court")); 
+
+
+fares.barrierLeave(new _stations2.default("Earl's Court"), TUBE);
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -109,10 +167,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Stations = function () {
-    function Stations(stationName) {
+    function Stations(station) {
         _classCallCheck(this, Stations);
 
-        this.stationName = stationName;
+        this._station = station;
 
         this.stations = [{
             "name": "Holborn",
@@ -130,12 +188,15 @@ var Stations = function () {
     }
 
     _createClass(Stations, [{
-        key: "stationZoneByName",
+        key: "station",
+        set: function set(name) {
+            return this._station;
+        },
         get: function get() {
             var _this = this;
 
             return this.stations.find(function (e) {
-                return e.name === _this.stationName;
+                return e.name === _this._station;
             });
         }
     }]);
@@ -146,7 +207,7 @@ var Stations = function () {
 exports.default = Stations;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -157,6 +218,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _transport_types = __webpack_require__(0);
+
+var _transport_types2 = _interopRequireDefault(_transport_types);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -183,61 +250,76 @@ var Fares = function () {
 
         this.credit = credit;
         this.maxFare = 3.20;
-        this.currentFare = 0;
+        this._currentFare = 0;
         this.zonesTravelled = [];
+        this.busJourneyFare = 1.80;
 
-        var enterBarrier = 'BARRIER_ENTRY';
-        var leaveBarrier = 'BARRIER_LEAVE';
+        this.enterBarrier = 'BARRIER_ENTRY';
+        this.leaveBarrier = 'BARRIER_LEAVE';
+
+        this.BUS = new _transport_types2.default('bus').transportType;
+        this.TUBE = new _transport_types2.default('tube').transportType;
     }
 
+    // Get current fare
+
+
     _createClass(Fares, [{
-        key: 'currentFare',
-        value: function (_currentFare) {
-            function currentFare() {
-                return _currentFare.apply(this, arguments);
-            }
-
-            currentFare.toString = function () {
-                return _currentFare.toString();
-            };
-
-            return currentFare;
-        }(function () {
-            return currentFare;
-        })
-    }, {
-        key: 'recordJourney',
-        value: function recordJourney(part) {
-            var station = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-
-            if (part === this.enterBarrier) {
-                console.log(this.enterBarrier);
-                this.zonesTravelled.push(station.stationZoneByName);
-            } else {
-                console.log(this.leaveBarrier);
-            }
-        }
-    }, {
         key: 'barrierEntry',
-        value: function barrierEntry(station) {
+        value: function barrierEntry(station, method) {
             // Deduct the max fare
             this.currentFare = this.credit - this.maxFare;
-            // Record the outward journey
-            this.recordJourney(this.enterBarrier, station);
+
+            // If travel is by bus, automatically deduct the bus fare
+            if (method.type === this.BUS.type) {
+                this.currentFare = this.currentFare + this.maxFare - this.busJourneyFare;
+            } else {
+                // If the journey is by tube, push the zones and do the calculation on barrier exit
+                this.zonesTravelled.push(station.station);
+            }
         }
     }, {
         key: 'barrierLeave',
-        value: function barrierLeave() {
-            this.recordJourney(this.leaveBarrier);
-            console.log(this.zonesTravelled);
+        value: function barrierLeave(station, method) {
+            // If travel is by bus, the fare has already been deducted
+            if (method.type === this.BUS.type) {
+                return;
+            } else {
+                this.zonesTravelled.push(station.station);
+                this.calculateFare();
+            }
         }
     }, {
         key: 'calculateFare',
         value: function calculateFare() {
-            if (travelMethod === 'bus') {
-                this.currentFare = this.credit - 1.80;
-                return;
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+
+                for (var _iterator = this.zonesTravelled[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var value = _step.value;
+
+
+                    console.log(value);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
             }
+
+            return;
 
             switch (this.zonesTravelled) {
                 case '':
@@ -264,6 +346,17 @@ var Fares = function () {
 
             // if travelMethod = 'bus'
             // remove 1.80 
+        }
+    }, {
+        key: 'currentFare',
+        get: function get() {
+            return this._currentFare;
+        }
+
+        // Set current fare
+        ,
+        set: function set(fare) {
+            this._currentFare = fare;
         }
     }]);
 

@@ -1,3 +1,4 @@
+import transportType from './transport_types'; 
 export default class Fares {
         /**
          * fare is calculated at max fare on entry
@@ -18,47 +19,66 @@ export default class Fares {
     constructor(credit=30) {
         this.credit = credit; 
         this.maxFare = 3.20; 
-        this.currentFare = 0; 
+        this._currentFare = 0; 
         this.zonesTravelled = [];  
+        this.busJourneyFare = 1.80; 
 
-        const enterBarrier = 'BARRIER_ENTRY'; 
-        const leaveBarrier = 'BARRIER_LEAVE'; 
+        this.enterBarrier = 'BARRIER_ENTRY'; 
+        this.leaveBarrier = 'BARRIER_LEAVE'; 
+
+        this.BUS = new transportType('bus').transportType; 
+        this.TUBE = new transportType('tube').transportType; 
+
+        
     }
 
     
 
-    currentFare() {
-        return currentFare; 
+    // Get current fare
+    get currentFare() {
+        return this._currentFare; 
     }
 
-    recordJourney(part, station="") {
-        if(part === this.enterBarrier) {
-            console.log(this.enterBarrier); 
-            this.zonesTravelled.push(station.stationZoneByName); 
-        } else {
-            console.log(this.leaveBarrier); 
+    // Set current fare
+    set currentFare(fare) {
+        this._currentFare = fare; 
+    }
+
+
+    barrierEntry(station, method) {   
+        // Deduct the max fare
+        this.currentFare = (this.credit - this.maxFare); 
+
+        
+        // If travel is by bus, automatically deduct the bus fare
+        if(method.type === this.BUS.type) {
+            this.currentFare = (this.currentFare + this.maxFare) - this.busJourneyFare; 
+        } else { // If the journey is by tube, push the zones and do the calculation on barrier exit
+            this.zonesTravelled.push(station.station); 
+
         }
     }
 
 
-    barrierEntry(station) {
-        // Deduct the max fare
-        this.currentFare = (this.credit - this.maxFare); 
-        // Record the outward journey
-        this.recordJourney(this.enterBarrier, station); 
-    }
-
-
-    barrierLeave() {
-        this.recordJourney(this.leaveBarrier); 
-        console.log(this.zonesTravelled); 
+    barrierLeave(station, method) {
+        // If travel is by bus, the fare has already been deducted
+        if(method.type === this.BUS.type) {
+            return; 
+        } else {
+            this.zonesTravelled.push(station.station); 
+            this.calculateFare(); 
+        }
+        
     }
 
     calculateFare() {
-        if (travelMethod === 'bus') {
-            this.currentFare = (this.credit - 1.80); 
-            return; 
+
+        
+        for(let value of this.zonesTravelled){
+            
+            console.log(value); 
         }
+        return; 
 
         switch (this.zonesTravelled) {
             case '': 
@@ -87,5 +107,6 @@ export default class Fares {
         // remove 1.80 
 
     }
+    
 
 }
