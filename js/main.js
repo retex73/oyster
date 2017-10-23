@@ -20,17 +20,17 @@ const TUBE = new transportType('tube').transportType;
 
 
 
-console.log(BUS); 
+// console.log(BUS); 
 
 
-fares.barrierEntry(new Stations('Holborn'), TUBE); 
+// fares.barrierEntry(new Stations('Holborn'), TUBE); 
 
 
-// fares.barrierEntry(new Stations("Earl's Court")); 
+// // fares.barrierEntry(new Stations("Earl's Court")); 
 
 
 
-fares.barrierLeave(new Stations("Earl's Court"), TUBE); 
+// fares.barrierLeave(new Stations("Earl's Court"), TUBE); 
 
 let passengerJourney = () => {
     fares.barrierEntry(new Stations('Holborn'), TUBE); 
@@ -41,8 +41,12 @@ let passengerJourney = () => {
 
     fares.barrierEntry(new Stations("Earl's Court"), TUBE); 
     fares.barrierLeave(new Stations('Hammersmith'), TUBE); 
+
+    fares.calculateFare(); 
 }
 
+
+passengerJourney(); 
 
 
 

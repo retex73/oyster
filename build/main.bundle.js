@@ -142,14 +142,31 @@ var fares = new _fares2.default();
 var BUS = new _transport_types2.default('bus').transportType;
 var TUBE = new _transport_types2.default('tube').transportType;
 
-console.log(BUS);
-
-fares.barrierEntry(new _stations2.default('Holborn'), TUBE);
-
-// fares.barrierEntry(new Stations("Earl's Court")); 
+// console.log(BUS); 
 
 
-fares.barrierLeave(new _stations2.default("Earl's Court"), TUBE);
+// fares.barrierEntry(new Stations('Holborn'), TUBE); 
+
+
+// // fares.barrierEntry(new Stations("Earl's Court")); 
+
+
+// fares.barrierLeave(new Stations("Earl's Court"), TUBE); 
+
+var passengerJourney = function passengerJourney() {
+    fares.barrierEntry(new _stations2.default('Holborn'), TUBE);
+    fares.barrierLeave(new _stations2.default("Earl's Court"), TUBE);
+
+    fares.barrierEntry(new _stations2.default("Earl's Court"), BUS);
+    fares.barrierLeave(new _stations2.default('Chelsea'), BUS);
+
+    fares.barrierEntry(new _stations2.default("Earl's Court"), TUBE);
+    fares.barrierLeave(new _stations2.default('Hammersmith'), TUBE);
+
+    fares.calculateFare();
+};
+
+passengerJourney();
 
 /***/ }),
 /* 2 */
@@ -182,7 +199,7 @@ var Stations = function () {
             "name": "Wimbledon",
             "zone": "3"
         }, {
-            "name": "Hammersmit",
+            "name": "Hammersmith",
             "zone": "2"
         }];
     }
@@ -224,6 +241,8 @@ var _transport_types = __webpack_require__(0);
 var _transport_types2 = _interopRequireDefault(_transport_types);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -286,23 +305,26 @@ var Fares = function () {
                 return;
             } else {
                 this.zonesTravelled.push(station.station);
-                this.calculateFare();
+                // this.calculateFare(); 
             }
         }
     }, {
         key: 'calculateFare',
         value: function calculateFare() {
+
+            var zones = [];
+
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
 
             try {
-
                 for (var _iterator = this.zonesTravelled[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var value = _step.value;
 
 
-                    console.log(value);
+                    console.log(value.zone);
+                    zones.push(value.zone);
                 }
             } catch (err) {
                 _didIteratorError = true;
@@ -319,6 +341,9 @@ var Fares = function () {
                 }
             }
 
+            var uniqueZones = [].concat(_toConsumableArray(new Set(zones)));
+
+            console.log(uniqueZones);
             return;
 
             switch (this.zonesTravelled) {

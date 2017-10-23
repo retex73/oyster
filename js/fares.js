@@ -66,18 +66,24 @@ export default class Fares {
             return; 
         } else {
             this.zonesTravelled.push(station.station); 
-            this.calculateFare(); 
+            // this.calculateFare(); 
         }
         
     }
 
     calculateFare() {
 
-        
+        let zones = []; 
+
         for(let value of this.zonesTravelled){
             
-            console.log(value); 
+            console.log(value.zone); 
+            zones.push(value.zone); 
         }
+        
+        const uniqueZones = [...new Set(zones)]; 
+
+        console.log(uniqueZones); 
         return; 
 
         switch (this.zonesTravelled) {
