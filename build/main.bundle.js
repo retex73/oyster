@@ -142,17 +142,6 @@ var fares = new _fares2.default();
 var BUS = new _transport_types2.default('bus').transportType;
 var TUBE = new _transport_types2.default('tube').transportType;
 
-// console.log(BUS); 
-
-
-// fares.barrierEntry(new Stations('Holborn'), TUBE); 
-
-
-// // fares.barrierEntry(new Stations("Earl's Court")); 
-
-
-// fares.barrierLeave(new Stations("Earl's Court"), TUBE); 
-
 var passengerJourney = function passengerJourney() {
     fares.barrierEntry(new _stations2.default('Holborn'), TUBE);
     fares.barrierLeave(new _stations2.default("Earl's Court"), TUBE);
@@ -167,6 +156,10 @@ var passengerJourney = function passengerJourney() {
 };
 
 passengerJourney();
+
+var newBalance = fares.currentFare;
+
+console.log(newBalance);
 
 /***/ }),
 /* 2 */
@@ -285,6 +278,14 @@ var Fares = function () {
 
     _createClass(Fares, [{
         key: 'barrierEntry',
+
+
+        /**
+         * When the user enters the barrier, record the method of transport and the station including zones
+         *
+         * @param {object} station 
+         * @param {object} method 
+         */
         value: function barrierEntry(station, method) {
             // Deduct the max fare
             this.currentFare = this.credit - this.maxFare;
@@ -297,6 +298,13 @@ var Fares = function () {
                 this.zonesTravelled.push(station.station);
             }
         }
+
+        /**
+         * When the user leaves the barrier, record the departing station and transport type
+         * @param {object} station 
+         * @param {object} method 
+         */
+
     }, {
         key: 'barrierLeave',
         value: function barrierLeave(station, method) {
@@ -304,16 +312,19 @@ var Fares = function () {
             if (method.type === this.BUS.type) {
                 return;
             } else {
+                // Record the stations the user travelled through
                 this.zonesTravelled.push(station.station);
+                // Calculate the fare based on the stations passed through 
                 // this.calculateFare(); 
             }
         }
     }, {
         key: 'calculateFare',
         value: function calculateFare() {
-
+            // create an array to hold the zones
             var zones = [];
 
+            // iterate over the zones and extract the zone numbers
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -322,10 +333,10 @@ var Fares = function () {
                 for (var _iterator = this.zonesTravelled[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var value = _step.value;
 
-
-                    console.log(value.zone);
                     zones.push(value.zone);
                 }
+
+                // Dedupe the zones
             } catch (err) {
                 _didIteratorError = true;
                 _iteratorError = err;
@@ -343,34 +354,45 @@ var Fares = function () {
 
             var uniqueZones = [].concat(_toConsumableArray(new Set(zones)));
 
-            console.log(uniqueZones);
-            return;
+            // * Anywhere in Zone 1               2.50
+            // * Any one zone outside zone 1      2.00
+            // * Any two zones including zone 1   3.00
+            // * Any two zones excluding zone 1   2.25
+            // * Any three zones                  3.20
+            // * Any bus journey                  1.80   
 
-            switch (this.zonesTravelled) {
-                case '':
+            console.log(uniqueZones);
+
+            switch (uniqueZones) {
+                // Anywhere in Zone 1
+                case uniqueZones.includes("1") && !uniqueZones.includes("2"):
+                    console.log('Anywhere in Zone 1');
+                    this.currentFare = this.credit - 2.50;
+                    return;
+
+                // Any two zones including zone 1
+                case uniqueZones.includes("2") && uniqueZones.includes("1") && !uniqueZones.includes("3"):
+                    console.log('Any two zones including zone 1');
+                    this.currentFare = this.credit - 2.00;
+                    return;
+
+                // Any two zones excluding zone 1
+                case uniqueZones.includes("2") && !uniqueZones.includes("1") && uniqueZones.length > 2:
+                    console.log('Any two zones excluding zone 1');
+                    this.currentFare = this.credit - 3.00;
+                    return;
+                // Any three zones
+                case uniqueZones.includes("1") && uniqueZones.includes("2") && uniqueZones.includes("3"):
+                    console.log('Any three zones');
+                    this.currentFare = this.credit - 3.20;
+                    return;
+                // If no conditions above are met
+                default:
+                    console.log('No zones detected so deduct the max');
+                    this.currentFare = this.credit - this.maxFare;
+                    return;
 
             }
-            // if zone 1: 
-            // remove 2.50 from currentFare
-
-            // if zone 1 doesn't exist
-            // and array length is 1
-            // remove 2.00
-
-            // if zone 1 exists 
-            // and array length is 2
-            // remove 3.00
-
-            // if zone 1 doesn't exist 
-            // and array length is 2
-            // remove 2.25
-
-            // if zone 1 exists and 
-            // and array length is greater than 2
-            // remove 3.20
-
-            // if travelMethod = 'bus'
-            // remove 1.80 
         }
     }, {
         key: 'currentFare',

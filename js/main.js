@@ -8,29 +8,11 @@ import transportType from './transport_types';
  */
 
 
-
-
-
-
 let fares = new Fares(); 
 
 
 const BUS = new transportType('bus').transportType; 
 const TUBE = new transportType('tube').transportType; 
-
-
-
-// console.log(BUS); 
-
-
-// fares.barrierEntry(new Stations('Holborn'), TUBE); 
-
-
-// // fares.barrierEntry(new Stations("Earl's Court")); 
-
-
-
-// fares.barrierLeave(new Stations("Earl's Court"), TUBE); 
 
 let passengerJourney = () => {
     fares.barrierEntry(new Stations('Holborn'), TUBE); 
@@ -47,6 +29,10 @@ let passengerJourney = () => {
 
 
 passengerJourney(); 
+
+let newBalance = fares.currentFare; 
+
+console.log(newBalance); 
 
 
 
