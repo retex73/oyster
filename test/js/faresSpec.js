@@ -1,5 +1,15 @@
+import Fares from '../../js/fares'; 
+
 describe('Fares', function() {
-    it('should add numbers', function(){
-        expect(1+2).toBe(3); 
-    });  
+    it('should create a new instance', function(){
+        let Fares = new Fares(30); 
+    }); 
+
+    // It should set opening credit to 30
+
+    // Describe Barrier Entry
+
+    // Describe Barrier Leave 
+
+
 }); 

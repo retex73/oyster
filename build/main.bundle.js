@@ -273,7 +273,9 @@ var Fares = function () {
         this.TUBE = new _transport_types2.default('tube').transportType;
     }
 
-    // Get current fare
+    /**
+     * Getter for current fare
+     */
 
 
     _createClass(Fares, [{
@@ -318,6 +320,11 @@ var Fares = function () {
                 // this.calculateFare(); 
             }
         }
+
+        /**
+         * Calculate the fare based off zones travelled through
+         */
+
     }, {
         key: 'calculateFare',
         value: function calculateFare() {
@@ -368,31 +375,33 @@ var Fares = function () {
                 case uniqueZones.includes("1") && !uniqueZones.includes("2"):
                     console.log('Anywhere in Zone 1');
                     this.currentFare = this.credit - 2.50;
-                    return;
+                    break;
 
                 // Any two zones including zone 1
                 case uniqueZones.includes("2") && uniqueZones.includes("1") && !uniqueZones.includes("3"):
                     console.log('Any two zones including zone 1');
                     this.currentFare = this.credit - 2.00;
-                    return;
+                    break;
 
                 // Any two zones excluding zone 1
                 case uniqueZones.includes("2") && !uniqueZones.includes("1") && uniqueZones.length > 2:
                     console.log('Any two zones excluding zone 1');
                     this.currentFare = this.credit - 3.00;
-                    return;
+                    break;
                 // Any three zones
                 case uniqueZones.includes("1") && uniqueZones.includes("2") && uniqueZones.includes("3"):
                     console.log('Any three zones');
                     this.currentFare = this.credit - 3.20;
-                    return;
+                    break;
                 // If no conditions above are met
                 default:
                     console.log('No zones detected so deduct the max');
                     this.currentFare = this.credit - this.maxFare;
-                    return;
+                    break;
 
             }
+
+            // TODO: ensure price does not exceed max fare
         }
     }, {
         key: 'currentFare',
@@ -400,7 +409,9 @@ var Fares = function () {
             return this._currentFare;
         }
 
-        // Set current fare
+        /**
+         * Setter for current fare
+         */
         ,
         set: function set(fare) {
             this._currentFare = fare;

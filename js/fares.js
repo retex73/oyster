@@ -32,14 +32,16 @@ export default class Fares {
         
     }
 
-    
-
-    // Get current fare
+    /**
+     * Getter for current fare
+     */
     get currentFare() {
         return this._currentFare; 
     }
 
-    // Set current fare
+    /**
+     * Setter for current fare
+     */
     set currentFare(fare) {
         this._currentFare = fare; 
     }
@@ -81,6 +83,9 @@ export default class Fares {
         
     }
 
+    /**
+     * Calculate the fare based off zones travelled through
+     */
     calculateFare() {
         // create an array to hold the zones
         let zones = []; 
@@ -107,32 +112,34 @@ export default class Fares {
             case uniqueZones.includes("1") && !uniqueZones.includes("2") : 
                 console.log('Anywhere in Zone 1'); 
                 this.currentFare = (this.credit - 2.50); 
-                return; 
+                break; 
             
             // Any two zones including zone 1
             case uniqueZones.includes("2") && uniqueZones.includes("1") && !uniqueZones.includes("3"): 
                 console.log('Any two zones including zone 1'); 
                 this.currentFare = (this.credit - 2.00); 
-                return; 
+                break; 
 
             // Any two zones excluding zone 1
             case uniqueZones.includes("2") && !uniqueZones.includes("1") && uniqueZones.length > 2 : 
                 console.log('Any two zones excluding zone 1'); 
                 this.currentFare = (this.credit - 3.00); 
-                return; 
+                break; 
             // Any three zones
             case uniqueZones.includes("1") && uniqueZones.includes("2") && uniqueZones.includes("3") : 
                 console.log('Any three zones'); 
                 this.currentFare = (this.credit - 3.20); 
-                return; 
+                break; 
             // If no conditions above are met
             default : 
                 console.log('No zones detected so deduct the max'); 
                 this.currentFare = (this.credit - this.maxFare);  
-                return; 
+                break; 
 
         }
 
+        // TODO: ensure price does not exceed max fare
+        
     }
     
 

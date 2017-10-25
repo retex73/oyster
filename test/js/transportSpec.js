@@ -8,4 +8,9 @@ describe('TransportTypes', function(){
         expect(transportTypeBus instanceof TransportTypes).toBeTruthy(); 
     }); 
     // Returns a transport type
+    it('should return a transport type', function(){
+        let transportTypeTube = new TransportTypes('TUBE'); 
+
+        expect(transportTypeTube.transportType.type).toBe('TUBE'); 
+    }); 
 }); 
